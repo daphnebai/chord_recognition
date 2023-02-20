@@ -58,15 +58,13 @@ def read_audio(filename):
     return info
 
 
-def convert(filename, type):
+def convert(type, filepath):
     """convert mp3 to wav"""
-    if type == 'mp3':
-        song = AudioSegment.from_mp3(filename)
-        song.export('audio/now.wav', format='wav')
-    elif type == 'm4a':
-        os.system("ffmpeg -i " + filename + " " + 'temp/now.wav')
-    filename = 'audio/now.wav'
-    return filename
+    song = AudioSegment.from_file(filepath)
+    filename = filepath.split(".")[0]
+    song.export(f"{filename}.wav", format="wav")
+
+    return f"{filename}.wav"
 
 
 def oscillogram(filename):
