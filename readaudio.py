@@ -6,17 +6,18 @@ import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 from pydub import AudioSegment
+from logmmse import logmmse_from_file
 
-#分轨：
-#import spleeter
+#install spleeter:
+#conda install -c conda-forge ffmpeg libsndfile
+#pip install spleeter
+
 musicname=input("please enter music name:")
-folder='F:\chord\spleet'
+folder=os.path.dirname(__file__)
 music='"'+folder+"\\"+musicname+".m4a"+'"'
 os.system("spleeter separate -p spleeter:2stems -o %s %s" %(folder,music))
-
-#降噪：
-from logmmse import logmmse_from_file
-out = logmmse_from_file(musicname+'.wav',output_file='out.wav')
+path=folder+"\\"+musicname+"\\accompaniment.wav"
+out = logmmse_from_file(input_file=path,output_file='out.wav')
 
 def read_audio(filename):
     """identifying file type and read the file"""
