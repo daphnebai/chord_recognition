@@ -6,50 +6,61 @@ from tkinter import filedialog as fd
 from tkinter import ttk
 from tkinter.messagebox import showinfo
 
-#ÊäÈëÎÄ¼şÔ¤´¦Àí
+#è¾“å…¥æ–‡ä»¶é¢„å¤„ç†
 f=open('in2.txt','r',encoding='utf-8')
 line=f.read();
-line=line.split() #Éú³É°üº¬ÎÄ±¾ÎÄ¼şµÄÁĞ±í
+line=line.split() #ç”ŸæˆåŒ…å«æ–‡æœ¬æ–‡ä»¶çš„åˆ—è¡¨
 count=1
-newLine=[] #¼ÇÂ¼ÏîÄÚÈİ
-newCount=[] #¼ÇÂ¼²åÈëÖØ¸´´ÎÊı
+newLine=[] #è®°å½•é¡¹å†…å®¹
+newCount=[] #è®°å½•æ’å…¥é‡å¤æ¬¡æ•°
 length=len(line)
-#ºÏ²¢Á¬ĞøµÄÏàÍ¬Ïî£¬²¢±ê×¢ÖØ¸´´ÎÊı
+#åˆå¹¶è¿ç»­çš„ç›¸åŒé¡¹ï¼Œå¹¶æ ‡æ³¨é‡å¤æ¬¡æ•°
 for i in range(0,length-1):
     if line[i]==line[i+1]:
-        count=count+1 #ÖØ¸´´ÎÊı¼ÓÒ»
+        count=count+1 #é‡å¤æ¬¡æ•°åŠ ä¸€
     else:
-        newLine.append(line[i]) #²åÈëÏîÄÚÈİ
-        newCount.append(count) #²åÈëÖØ¸´´ÎÊı
+        newLine.append(line[i]) #æ’å…¥é¡¹å†…å®¹
+        newCount.append(count) #æ’å…¥é‡å¤æ¬¡æ•°
         count=1
-#ÎÄ¼şÎ²²¿´¦Àí
+#æ–‡ä»¶å°¾éƒ¨å¤„ç†
 newLine.append(line[length-1])
 newCount.append(count)
 length=len(newLine)
 #print(newLine)
 #print(newCount)
 
-#pygame¿âÓÃÓÚ²¥·ÅÒôÆµÎÄ¼ş,pygame³õÊ¼»¯
+#pygameåº“ç”¨äºæ’­æ”¾éŸ³é¢‘æ–‡ä»¶,pygameåˆå§‹åŒ–
 pygame.init()
 pygame.mixer.init()
+musicPlayingFlag=0       #éŸ³é¢‘æ˜¯å¦åœ¨æ’­æ”¾çš„æ ‡å¿—ï¼Œ0è¡¨ç¤ºåœæ­¢ï¼Œ1è¡¨ç¤ºæ’­æ”¾
 
-#GUI³õÊ¼»¯
+#GUIåˆå§‹åŒ–
 root = tk.Tk()
-root.title("ºÍÏÒÊ¶±ğÏµÍ³")
+root.title("å’Œå¼¦è¯†åˆ«ç³»ç»Ÿ")
 root.geometry("600x340")
-backgroundImage=PhotoImage(file=r"background.png") #Ìí¼Ó±³¾°Í¼Æ¬
+backgroundImage=PhotoImage(file=r"background.png") #æ·»åŠ èƒŒæ™¯å›¾ç‰‡
 background_label=tk.Label(image=backgroundImage)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
-canvas=Canvas(root,bg="white",width=300,height=200) #½¨Á¢Ò»¸ö»­²¼¶ÔÏócanvas£¬ÊôÓÚtk¶ÔÏó
-canvas.place(x=250,y=70,anchor=tk.NW) #½«»­²¼¶ÔÏó¸üĞÂÏÔÊ¾ÔÚ¿ò¼ÜÖĞ
-canvas.create_text(150,100,text='',font=("Helvetica", 40)) #Ìí¼ÓÎÄ×Ö£¬ÊôÓÚcanvas¶ÔÏó
-canvas.create_text(250,100,text='',font=("Helvetica", 20)) #Ìí¼ÓÎÄ×Ö£¬ÊôÓÚcanvas¶ÔÏó
+canvas=Canvas(root,bg="white",width=300,height=200) #å»ºç«‹ä¸€ä¸ªç”»å¸ƒå¯¹è±¡canvasï¼Œå±äºtkå¯¹è±¡
+canvas.place(x=250,y=70,anchor=tk.NW) #å°†ç”»å¸ƒå¯¹è±¡æ›´æ–°æ˜¾ç¤ºåœ¨æ¡†æ¶ä¸­
+canvas.create_text(150,100,text='',font=("Helvetica", 40)) #æ·»åŠ æ–‡å­—ï¼Œå±äºcanvaså¯¹è±¡
+canvas.create_text(250,100,text='',font=("Helvetica", 20)) #æ·»åŠ æ–‡å­—ï¼Œå±äºcanvaså¯¹è±¡
 canvas.create_rectangle(5, 5, 300, 200,
-outline='black', # ±ß¿òÑÕÉ«
-width=2 # ±ß¿ò¿í¶È
+outline='black', # è¾¹æ¡†é¢œè‰²
+width=2 # è¾¹æ¡†å®½åº¦
 )
 
-#ÏÔÊ¾¸èÇúÃû  
+#ç”»å¸ƒé‡ç”»
+def canvasRepaint():
+    print("repaint")
+    canvas.coords(1,150,100)
+    canvas.coords(2,250,100)
+    canvas.itemconfigure(1,text='',font=("Helvetica", 40))  #å·¦è¾¹çš„å­—ç¬¦ä¸²ç¬ç§»åˆ°æœ€å³ç«¯ï¼Œå¹¶æ”¹å˜å…¶å†…å®¹å’Œå¤§å°
+    canvas.itemconfigure(2,text='',font=("Helvetica", 20)) 
+    root.update()
+
+
+#æ˜¾ç¤ºæ­Œæ›²å  
 var = ""
 text = tk.StringVar()
        
@@ -60,7 +71,7 @@ lbl = tk.Label(
     textvariable=text
 ).place(x=250, y=20) 
 
-#´ò¿ªÎÄ¼ş°´Å¥
+#æ‰“å¼€æ–‡ä»¶æŒ‰é’®
 def OpenFile():
     global var
     
@@ -94,12 +105,16 @@ Open = tk.Button(
     command=OpenFile
 ).place(x=30, y=20)
 
-#²¥·Å°´Å¥£¬¿ªÊ¼²¥·ÅÒôÀÖ£¬Í¬Ê±µ÷ÓÃCartoon£¨£©£¬²¥·Å¶ÔÓ¦¶¯»­
+#æ’­æ”¾æŒ‰é’®ï¼Œå¼€å§‹æ’­æ”¾éŸ³ä¹ï¼ŒåŒæ—¶è°ƒç”¨Cartoonï¼ˆï¼‰ï¼Œæ’­æ”¾å¯¹åº”åŠ¨ç”»
 def PLAY():
     if var != "":
         pygame.mixer.music.set_volume(1.0)
         pygame.mixer.music.load(var)
         pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy()==0:
+            time.sleep(0.01)
+        global musicPlayingFlag
+        musicPlayingFlag=1
         Cartoon()
     else:
         showinfo(
@@ -116,10 +131,12 @@ play = tk.Button(
     command=PLAY
 ).place(x=100, y=20)
 
-#Í£Ö¹°´Å¥
+#åœæ­¢æŒ‰é’®
 def Stop():
     pygame.mixer.music.stop()
     pygame.mixer.music.unload()
+    global musicPlayingFlag
+    musicPlayingFlag=0
     
 stopButton=PhotoImage(file=r"stop.png")
 stop = tk.Button(
@@ -130,7 +147,7 @@ stop = tk.Button(
     command=Stop
 ).place(x=170, y=20)
 
-#ÒôÁ¿µ÷½Ú
+#éŸ³é‡è°ƒèŠ‚
 def setVolume(vol):
     pygame.mixer.music.set_volume(int(vol)/100)
 
@@ -138,7 +155,7 @@ tk.Label(
     root, 
     font=("Arial", 10),
     bg="white",
-    text="ÒôÁ¿(Volume)"
+    text="éŸ³é‡(Volume)"
 ).place(x=30, y=70) 
 slid_var = DoubleVar()
 slid_var.set(100)
@@ -151,46 +168,50 @@ slider = Scale(
     bg="white"
 ).place(x=30, y=90)
 
-#¹¦ÄÜÑ¡Ôñ£¨ÏÂÀ­¿ò£©
+#åŠŸèƒ½é€‰æ‹©ï¼ˆä¸‹æ‹‰æ¡†ï¼‰
 tk.Label(
     root, 
     font=("Arial", 10),
     bg="white",
-    text="¹¦ÄÜÑ¡Ôñ(Function)"
+    text="åŠŸèƒ½é€‰æ‹©(Function)"
 ).place(x=30, y=140)
 
-# ´´½¨ÏÂÀ­²Ëµ¥
+# åˆ›å»ºä¸‹æ‹‰èœå•
 cbox = ttk.Combobox(root)
-# Ê¹ÓÃ grid() À´¿ØÖÆ¿Ø¼şµÄÎ»ÖÃ
+# ä½¿ç”¨ grid() æ¥æ§åˆ¶æ§ä»¶çš„ä½ç½®
 cbox.place(x=30,y=160)
-# ÉèÖÃÏÂÀ­²Ëµ¥ÖĞµÄÖµ
+# è®¾ç½®ä¸‹æ‹‰èœå•ä¸­çš„å€¼
 cbox['value'] = ('Original','Simplified')
-#Í¨¹ı current() ÉèÖÃÏÂÀ­²Ëµ¥Ñ¡ÏîµÄÄ¬ÈÏÖµ
+#é€šè¿‡ current() è®¾ç½®ä¸‹æ‹‰èœå•é€‰é¡¹çš„é»˜è®¤å€¼
 cbox.current(0)
 
-# ±àĞ´»Øµ÷º¯Êı£¬°ó¶¨Ö´ĞĞÊÂ¼ş,ÏòÎÄ±¾²åÈëÑ¡ÖĞÎÄ±¾
+# ç¼–å†™å›è°ƒå‡½æ•°ï¼Œç»‘å®šæ‰§è¡Œäº‹ä»¶,å‘æ–‡æœ¬æ’å…¥é€‰ä¸­æ–‡æœ¬
 def func(event):
     text.insert('insert',cbox.get()+"\n")
     if cbox.get()=='Original':
         state=0
     else:
         state=1
-# °ó¶¨ÏÂÀ­²Ëµ¥ÊÂ¼ş
+# ç»‘å®šä¸‹æ‹‰èœå•äº‹ä»¶
 cbox.bind("<<ComboboxSelected>>",func)
 
-#µ÷ĞÔÏÔÊ¾¶¯»­Ğ§¹û
+#è°ƒæ€§æ˜¾ç¤ºåŠ¨ç”»æ•ˆæœ
 def Cartoon():
+    global musicPlayingFlag
     for i in range (0,length-1):
-        for j in range(0,20):                 #½¨Á¢Ò»¸ö60´ÎµÄÑ­»· £¬Ñ­»·Çø¼ä[0,59£©
-            canvas.move(1,-5,0)               #Ä¬ÈÏÍ¼ĞÎ±àºÅÎª1£¬ÓÃÓÚº¯Êıµ÷ÓÃ£¬ÒÔºóµÄÍ¼ĞÎ±àºÅË³ĞòÀàÍÆ¡£canvas¶ÔÏóÖĞµÄ±àºÅ¡°1¡±Í¼ĞÎµ÷ÓÃÒÆ¶¯º¯Êı£¬xÖá5¸öÏñËØµã£¬yÖá²»±ä
+        if musicPlayingFlag==0: 
+            canvasRepaint()
+            return  
+        for j in range(0,20):                 #å»ºç«‹ä¸€ä¸ª60æ¬¡çš„å¾ªç¯ ï¼Œå¾ªç¯åŒºé—´[0,59ï¼‰
+            canvas.move(1,-5,0)               #é»˜è®¤å›¾å½¢ç¼–å·ä¸º1ï¼Œç”¨äºå‡½æ•°è°ƒç”¨ï¼Œä»¥åçš„å›¾å½¢ç¼–å·é¡ºåºç±»æ¨ã€‚canvaså¯¹è±¡ä¸­çš„ç¼–å·â€œ1â€å›¾å½¢è°ƒç”¨ç§»åŠ¨å‡½æ•°ï¼Œxè½´5ä¸ªåƒç´ ç‚¹ï¼Œyè½´ä¸å˜
             canvas.move(2,-5,0)
-            root.update()                           #¸üĞÂ¿ò¼Ü£¬Ç¿ÖÆÏÔÊ¾¸Ä±ä
-            time.sleep(newCount[i]/200)           #Ë¯ÃßnewCount[i]/200Ãë£¬ÖÆÔìÖ¡ÓëÖ¡¼äµÄ¼ä¸ôÊ±¼ä£¬±£Ö¤²ÉÑùÂÊ
+            root.update()                           #æ›´æ–°æ¡†æ¶ï¼Œå¼ºåˆ¶æ˜¾ç¤ºæ”¹å˜
+            time.sleep(newCount[i]/200)           #ç¡çœ newCount[i]/200ç§’ï¼Œåˆ¶é€ å¸§ä¸å¸§é—´çš„é—´éš”æ—¶é—´ï¼Œä¿è¯é‡‡æ ·ç‡
         canvas.move(i%2+1,200,0)
-        canvas.itemconfigure(i%2+1, text=newLine[i],font=("Helvetica", 20))  #×ó±ßµÄ×Ö·û´®Ë²ÒÆµ½×îÓÒ¶Ë£¬²¢¸Ä±äÆäÄÚÈİºÍ´óĞ¡
+        canvas.itemconfigure(i%2+1, text=newLine[i],font=("Helvetica", 20))  #å·¦è¾¹çš„å­—ç¬¦ä¸²ç¬ç§»åˆ°æœ€å³ç«¯ï¼Œå¹¶æ”¹å˜å…¶å†…å®¹å’Œå¤§å°
         canvas.itemconfigure((i+1)%2+1,font=("Helvetica", 40)) 
         root.update()
         time.sleep(0.05)
 
-#ÏÔÊ¾´°¿Ú
+#æ˜¾ç¤ºçª—å£
 root.mainloop()
