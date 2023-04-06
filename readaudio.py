@@ -6,18 +6,6 @@ import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 from pydub import AudioSegment
-from logmmse import logmmse_from_file
-
-#install spleeter:
-#conda install -c conda-forge ffmpeg libsndfile
-#pip install spleeter
-
-musicname=input("please enter music name:")
-folder=os.path.dirname(__file__)
-music='"'+folder+"\\"+musicname+".m4a"+'"'
-os.system("spleeter separate -p spleeter:2stems -o %s %s" %(folder,music))
-path=folder+"\\"+musicname+"\\accompaniment.wav"
-out = logmmse_from_file(input_file=path,output_file='out.wav')
 
 def read_audio(filename):
     """identifying file type and read the file"""
@@ -117,7 +105,7 @@ def show_info(info):
 
 
 if __name__ == '__main__':
-    filename = 'audiosamples/PianoChordSet.wav'
+    filename = 'out.wav'
     info = read_audio(filename)
     show_info(info)
     # oscillogram(filename)
