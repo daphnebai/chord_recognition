@@ -1,9 +1,14 @@
+import os
 import numpy as np
 import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 from scipy.stats import mode
+from logmmse import logmmse_from_file
 
+#install spleeter:
+#conda install -c conda-forge ffmpeg libsndfile
+#pip install spleeter
 
 def chromagram(filename, sr, hop_length, display):
     """
@@ -210,7 +215,16 @@ def smoothed_chordgram(chordgram, sr, display):
 
 
 if __name__ == '__main__':
-    filename = 'audiosamples/PianoChordSet.wav'
+ #   filename = 'audiosamples/PianoChordSet.wav'
+
+    musicname = input("please enter music name:")
+    folder = os.path.dirname(__file__)
+    music = '"' + folder + "\\" + musicname + ".m4a" + '"'
+    os.system("spleeter separate -p spleeter:2stems -o %s %s" % (folder, music))
+    path = folder + "\\" + musicname + "\\accompaniment.wav"
+    out = logmmse_from_file(input_file=path, output_file='out.wav')
+
+    filename = 'out.wav'
     sr = 44100
     hop_length = 4096
     display = False
